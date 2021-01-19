@@ -12,52 +12,13 @@
 
 #include "get_next_line.h"
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t n)
-{
-	size_t i;
-
-	if (dest == NULL || src == NULL)
-		return (0);
-	i = 0;
-	if (n != 0)
-	{
-		while (i < (n - 1) && src[i])
-		{
-			dest[i] = src[i];
-			++i;
-		}
-		dest[i] = '\0';
-	}
-	return (ft_strlen(src));
-}
-
-char	*ft_strdup(const char *str)
-{
-	int		length;
-	char	*res;
-
-	length = 0;
-	while (str[length])
-	{
-		++length;
-	}
-	if (!(res = (char*)malloc(sizeof(char) * (length + 1))))
-		return (NULL);
-	res[length] = '\0';
-	while (length > 0)
-	{
-		--length;
-		res[length] = str[length];
-	}
-	return (res);
-}
 
 int		findEndl(char	*buffer)
 {
 	int		i;
 
 	i = 0;
-	while (buffer[i] != '\n' || buffer [i] != '\0')
+	while (buffer[i] != '\n' && buffer [i] != '\0')
 	{
 		++i;
 	}
@@ -71,12 +32,19 @@ int		get_next_line(int fd, char **line)
 	char		*temp;
 	int			rowlen;
 
-	if (!(*line = malloc(sizeof(char)*(BUFFER_SIZE + 1))))
-		return (-1);
+	// if (!(line = (char**)malloc(sizeof(char)*(BUFFER_SIZE + 1))))
+	// 	return (-1);
 	while ((count = read(fd, buffer, BUFFER_SIZE)))
 	{
 		if (count == -1)
 			return (-1);
 		rowlen = findEndl(buffer);
+	 	if (!(line = (char**)malloc(sizeof(char)*(rowlen + 1))))
+			return (-1);
+		ft_strlcpy(line, buffer, rowlen);
+		if (i == BUFFER_SIZE)
+		{
+
+		}
 	}
 }

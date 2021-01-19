@@ -14,12 +14,21 @@ CFLAGS=-Wall -Wextra -Werror
 
 NAME=get_next_line.a
 
-.PHONY: all clean fclean re
+SRC=get_next_line.c \
+	get_next_line_utils.c
+
+%o.:%.c
+	gcc -c $(CFLAGS) $< -o $@
 
 NAME:
 
 all: $(NAME)
 
+test:
+	gcc $(FLAGS) -D BUFFER_SIZE=32 $(SRC) main.c
 clean:
+	rm -rf $(OBJ)
 
 fclean:clean
+
+.PHONY: all clean fclean re
