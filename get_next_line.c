@@ -31,20 +31,21 @@ int		get_next_line(int fd, char **line)
 	int			count;
 	char		*temp;
 	int			rowlen;
-	int			i;
 
-	i = 0;
-	buffer[BUFFER_SIZE] = '\0';
 	if (buffer[0] != '\0')
-	{
-		if (!(*line = (char*)malloc(sizeof(char)*(ft_strlen(buffer + findEndl(buffer) + 1) + 1))))
+	{	
+		// if (buffer[findEndl(buffer)] != '\0')
+		// 	ft_strlcpy(buffer, buffer + findEndl(buffer) + 1, BUFFER_SIZE - findEndl(buffer) - 1);
+		
+		if (!(*line = (char*)malloc(sizeof(char)*(findEndl(buffer) + 1))))
 			return (-1);
-		ft_strlcpy(*line, buffer + findEndl(buffer) + 1, ft_strlen(buffer + findEndl(buffer) + 1) + 1);
+		ft_strlcpy(*line, buffer, findEndl(buffer) + 1);
+		if (ft_strlen(*line) < ft_strlen(buffer))
+			return (1);
 	}
-	while ((count = read(fd, buffer, BUFFER_SIZE)))
+	buffer[BUFFER_SIZE] = '\0';
+	while ((count = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
-		if (count == -1)
-			return (-1);
 		buffer[count] = '\0';
 		rowlen = findEndl(buffer);
 		temp = *line;
@@ -52,16 +53,24 @@ int		get_next_line(int fd, char **line)
 			return (-1);
 		ft_strlcpy(*line, temp, ft_strlen(temp) + 1);
 		ft_strlcpy(*line + ft_strlen(temp), buffer, rowlen + 1);
-		if (!temp)
+		if (temp)
+		{
 			free(temp);
+		}
 		if (count < BUFFER_SIZE)
 		{
+
 			buffer[0] = '\0';
+			return (0);
 		}
 		if (BUFFER_SIZE > rowlen)
-		{
-			break ;
-		} 
+			return (1);	
 	}
-	return (0);
+	if (!(*line))
+ 	{
+ 		if (!(*line = (char*)malloc(sizeof(char)*(1))))
+			return (-1);
+		(*line)[0] = '\0';
+	}
+	return (count);
 }

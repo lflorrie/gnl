@@ -25,7 +25,7 @@ NAME:
 all: $(NAME)
 
 test:
-	gcc $(FLAGS) -D BUFFER_SIZE=7 $(SRC) main.c
+	gcc $(FLAGS) -D BUFFER_SIZE=2 $(SRC) main.c
 clean:
 	rm -rf $(OBJ)
 
